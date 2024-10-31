@@ -1,6 +1,6 @@
 import { Color } from '@deck.gl/core';
 import { stringify } from 'qs';
-import { ckmeans } from 'simple-statistics';
+import { ckmeans, mean, standardDeviation } from 'simple-statistics';
 import { Feature } from '@loaders.gl/schema';
 import { DateTime, DurationUnits } from 'luxon';
 import { TileCell } from '../loaders/lib/types';
@@ -11,10 +11,7 @@ import {
   FourwingsChunk,
   FourwingsDeckSublayer,
 } from './fourwings-heatmap.types';
-import {
-  BASE_API_TILES_URL,
-  getChunkByInterval,
-} from './fourwings.config';
+import { BASE_API_TILES_URL, getChunkByInterval } from './fourwings.config';
 import {
   CONFIG_BY_INTERVAL,
   getFourwingsInterval,
@@ -338,4 +335,22 @@ export function getIntervalFrames({
     CONFIG_BY_INTERVAL[interval].getIntervalFrame(endTime) - tileStartFrame
   );
   return { interval, tileStartFrame, startFrame, endFrame };
+}
+
+export function removeOutliers({
+  allValues,
+  aggregationOperation,
+}: {
+  allValues: number[];
+  /* FourwingsAggregationOperation */
+  aggregationOperation?: 'avg' | 'sum';
+}) {
+  const allValuesCleaned = allValues.filter(Boolean);
+  if (!allValuesCleaned.length) return [];
+  const meanValue = mean(allValuesCleaned);
+  const deviationScale = aggregationOperation === 'avg' ? 2 : 1;
+  const standardDeviationValue = standardDeviation(allValuesCleaned);
+  const upperCut = meanValue + standardDeviationValue * deviationScale;
+  const lowerCut = meanValue - standardDeviationValue * deviationScale;
+  return allValuesCleaned.filter((a) => a >= lowerCut && a <= upperCut);
 }

@@ -5,9 +5,9 @@ import { FourwingsHeatmapTileLayer } from './layers/FourwingsHeatmapTileLayer';
 import { BaseMapLayer } from './layers/BasemapLayer';
 
 const INITIAL_VIEW_STATE: MapViewState = {
-  longitude: -122.41669,
-  latitude: 37.7853,
-  zoom: 13,
+  longitude: -30,
+  latitude: 30,
+  zoom: 3,
 };
 
 const fourwingsLayerProps: FourwingsHeatmapTileLayerProps = {
@@ -18,9 +18,9 @@ const fourwingsLayerProps: FourwingsHeatmapTileLayerProps = {
     {
       id: 'ais',
       visible: true,
-      datasets: ['public-global-fishing-effort:v3.0'],
-      color: '#00FFBC',
-      colorRamp: 'teal',
+      datasets: ['public-global-presence:v3.0'],
+      color: '#FF64CE',
+      colorRamp: 'magenta',
       unit: 'hours',
       extentStart: 1325376000000,
       extentEnd: 1730073600000,

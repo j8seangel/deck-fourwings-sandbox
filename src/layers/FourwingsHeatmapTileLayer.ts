@@ -19,6 +19,7 @@ import {
   aggregateCell,
   getIntervalFrames,
   getSteps,
+  removeOutliers,
 } from './fourwings-heatmap.utils';
 import {
   FourwingsAggregationOperation,
@@ -128,7 +129,8 @@ export class FourwingsHeatmapTileLayer extends CompositeLayer<FourwingsHeatmapTi
       return this.getColorDomain();
     }
 
-    return getSteps(allValues);
+    const dataFiltered = removeOutliers({ allValues, aggregationOperation });
+    return getSteps(dataFiltered);
   };
 
   updateColorDomain = debounce(() => {
