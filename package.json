@@ -16,6 +16,7 @@
     "@deck.gl/layers": "9.0.34",
     "@deck.gl/mesh-layers": "^9.0.34",
     "@deck.gl/react": "9.0.34",
+    "@globalfishingwatch/timebar": "^5.0.1",
     "@loaders.gl/core": "4.3.2",
     "@loaders.gl/loader-utils": "4.3.2",
     "@loaders.gl/schema": "4.3.2",
