@@ -1,42 +1,40 @@
 export const COLOR_RAMP_DEFAULT_NUM_STEPS = 10;
-export const COLOR_RAMP_BIVARIATE_NUM_STEPS = 4;
-export const COLOR_RAMP_DEFAULT_NUM_STEPS_TO_WHITE = [7, 3];
-export const EMPTY_RGBA_COLOR = { r: 0, g: 0, b: 0, a: 0 }
+const EMPTY_RGBA_COLOR = { r: 0, g: 0, b: 0, a: 0 };
 
-export const rgbaStringToObject = (rgba?: string) => {
-  if (!rgba) return EMPTY_RGBA_COLOR
-  const startIndex = rgba.startsWith('rgb') ? 4 : 0
-  const colorHasAlpha = rgba.includes('rgba')
+const rgbaStringToObject = (rgba?: string) => {
+  if (!rgba) return EMPTY_RGBA_COLOR;
+  const startIndex = rgba.startsWith('rgb') ? 4 : 0;
+  const colorHasAlpha = rgba.includes('rgba');
   const [r, g, b, a] = rgba
     .substring(startIndex + (colorHasAlpha ? 1 : 0), rgba.length - 1)
     .replace(/ /g, '')
-    .split(',')
+    .split(',');
 
   return {
     r: parseInt(r),
     g: parseInt(g),
     b: parseInt(b),
     a: colorHasAlpha ? parseFloat(a) : 1,
-  }
-}
-export const hexToRgb = (hex: string) => {
-  const cleanHex = hex.replace('#', '')
+  };
+};
+const hexToRgb = (hex: string) => {
+  const cleanHex = hex.replace('#', '');
   const color = {
     r: parseInt(cleanHex.slice(0, 2), 16),
     g: parseInt(cleanHex.slice(2, 4), 16),
     b: parseInt(cleanHex.slice(4, 6), 16),
-  }
-  return color
-}
+  };
+  return color;
+};
 
-export const rgbToRgbString = ({ r, g, b }: { r: number; g: number; b: number }) => {
-  return `${r}, ${g}, ${b}`
-}
+const rgbToRgbString = ({ r, g, b }: { r: number; g: number; b: number }) => {
+  return `${r}, ${g}, ${b}`;
+};
 
-export const hexToRgbString = (hex: string) => {
-  const color = hexToRgb(hex)
-  return rgbToRgbString(color)
-}
+const hexToRgbString = (hex: string) => {
+  const color = hexToRgb(hex);
+  return rgbToRgbString(color);
+};
 
 // ---- Heatmap Generator color ramps types
 export type ColorRampId =
@@ -51,11 +49,9 @@ export type ColorRampId =
   | 'orange'
   | 'bathymetry'; // Custom one for the bathymetry dataset
 
-export type ColorRampsIds = ColorRampId;
-
 const MIN_OPACITY = 0.1;
 
-export const getColorRampByOpacitySteps = (
+const getColorRampByOpacitySteps = (
   finalColor: string,
   numSteps = COLOR_RAMP_DEFAULT_NUM_STEPS
 ) => {
@@ -69,7 +65,7 @@ export const getColorRampByOpacitySteps = (
   return opacitySteps.map((opacity) => `rgba(${color}, ${opacity})`);
 };
 
-export const HEATMAP_COLORS_BY_ID: Record<ColorRampId, string> = {
+const HEATMAP_COLORS_BY_ID: Record<ColorRampId, string> = {
   teal: '#00FFBC',
   magenta: '#FF64CE',
   lilac: '#9CA4FF',

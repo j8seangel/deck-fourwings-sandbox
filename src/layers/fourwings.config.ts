@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { DateTime, DateTimeUnit, Duration } from 'luxon';
+import { DateTime } from 'luxon';
 import { FourwingsInterval } from '../loaders/lib/types';
 import { FourwingsChunk } from './fourwings-heatmap.types';
 import { getUTCDateTime } from './fourwings-heatmap.utils';
@@ -9,35 +9,7 @@ export const BASE_API_TILES_URL =
   `https://gateway.api.dev.globalfishingwatch.org/v3/4wings/tile/heatmap/{z}/{x}/{y}` as const;
 export const HEATMAP_ID = 'heatmap';
 export const FOURWINGS_MAX_ZOOM = 12;
-export const MAX_RAMP_VALUES = 10000;
-
-export const CHUNKS_BY_INTERVAL: Record<
-  FourwingsInterval,
-  { unit: DateTimeUnit; value: number } | undefined
-> = {
-  HOUR: {
-    unit: 'day',
-    value: 20,
-  },
-  DAY: {
-    unit: 'year',
-    value: 1,
-  },
-  MONTH: undefined,
-  YEAR: undefined,
-};
-
-export const getDateInIntervalResolution = (
-  date: number,
-  interval: FourwingsInterval
-): number => {
-  return DateTime.fromMillis(date)
-    .toUTC()
-    .startOf(interval as any)
-    .toMillis();
-};
-
-export const CHUNKS_BUFFER = 1;
+const CHUNKS_BUFFER = 1;
 // TODO: validate if worth to make this dynamic for the playback
 export const getChunkByInterval = (
   start: number,
@@ -72,12 +44,4 @@ export const getChunkByInterval = (
     bufferedStart: bufferedStartDate.toMillis(),
     bufferedEnd: Math.min(bufferedEndDate.toMillis(), now.toMillis()),
   };
-};
-
-export const getChunkBuffer = (interval: FourwingsInterval) => {
-  const { buffer, unit } = LIMITS_BY_INTERVAL[interval] || {};
-  if (!unit) {
-    return 0;
-  }
-  return Duration.fromObject({ [unit]: buffer }).toMillis();
 };

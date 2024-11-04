@@ -1,15 +1,8 @@
 import type { LoaderOptions } from '@loaders.gl/loader-utils';
 import { _TileLoadProps } from '@deck.gl/geo-layers';
-import { Feature, Point, Polygon } from 'geojson';
+import { Feature, Polygon } from 'geojson';
 
 export type FourwingsRawData = number[];
-
-export type FourwingsTileData = {
-  cols: number;
-  rows: number;
-  cells: Cell[];
-};
-
 export type Cell = number[][];
 
 export type TileCell = Cell & {
@@ -55,7 +48,7 @@ export type FourwingsClustersLoaderOptions = LoaderOptions & {
   fourwingsClusters?: ParseFourwingsClustersOptions;
 };
 
-export type FourwingsFeatureProperties = {
+type FourwingsFeatureProperties = {
   id?: string;
   initialValues: Record<string, number[]>;
   startOffsets: number[];
@@ -67,36 +60,9 @@ export type FourwingsFeatureProperties = {
   row: number;
 };
 
-export type FourwingsPositionFeatureProperties = {
-  id: string;
-  value: number;
-};
-
-export type FourwingsPointFeatureProperties = {
-  id: number;
-  value: number;
-};
-
-export type FourwingsStaticFeatureProperties = {
-  count: number;
-  values: number[][];
-};
-
 export type FourwingsFeature<Properties = FourwingsFeatureProperties> = Feature<
   Polygon,
   Properties
 > & {
   aggregatedValues?: number[];
 };
-
-export type FourwingsValuesAndDatesFeature = [number[], number[]][]; // values in first place, dates in second
-export type FourwingsStaticFeature =
-  FourwingsFeature<FourwingsStaticFeatureProperties>;
-export type FourwingsPositionFeature = Feature<
-  Point,
-  FourwingsPositionFeatureProperties
->;
-export type FourwingsPointFeature = Feature<
-  Point,
-  FourwingsPointFeatureProperties
->;
