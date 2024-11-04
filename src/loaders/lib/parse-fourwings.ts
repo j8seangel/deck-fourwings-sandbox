@@ -14,15 +14,15 @@ import type {
   FourwingsRawData,
 } from './types';
 
-export const NO_DATA_VALUE = 4294967295;
-export const SCALE_VALUE = 1;
-export const OFFSET_VALUE = 0;
-export const CELL_NUM_INDEX = 0;
-export const CELL_START_INDEX = 1;
-export const CELL_END_INDEX = 2;
-export const CELL_VALUES_START_INDEX = 3;
+const NO_DATA_VALUE = 4294967295;
+const SCALE_VALUE = 1;
+const OFFSET_VALUE = 0;
+const CELL_NUM_INDEX = 0;
+const CELL_START_INDEX = 1;
+const CELL_END_INDEX = 2;
+const CELL_VALUES_START_INDEX = 3;
 
-export const getCellTimeseries = (
+const getCellTimeseries = (
   intArrays: FourwingsRawData[],
   options?: FourwingsLoaderOptions
 ): FourwingsFeature[] => {

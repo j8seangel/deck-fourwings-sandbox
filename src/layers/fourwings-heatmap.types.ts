@@ -7,13 +7,6 @@ import {
 } from '../loaders/lib/types';
 import { ColorRampId } from './fourwings.colors';
 
-export type DeckPickingObject<G> = {
-  id: string;
-  title?: string;
-  layerId: string;
-  color?: string;
-} & G;
-
 export type FourwingsChunk = {
   id: string;
   interval: FourwingsInterval;
@@ -34,7 +27,8 @@ export type FourwingsColorObject = {
   a: number;
 };
 export type ColorDomain = number[] | number[][];
-export type ColorRange = FourwingsColorObject[];
+
+type ColorRange = FourwingsColorObject[];
 export type SublayerColorRanges = ColorRange[];
 
 export type AggregateCellParams = {
@@ -49,8 +43,6 @@ export type CompareCellParams = {
   cellValues: Cell;
   aggregationOperation?: FourwingsAggregationOperation;
 };
-
-export type FourwingsHeatmapTileData = FourwingsFeature[];
 export type FourwingsDeckSublayer = {
   id: string;
   datasets: string[];
@@ -66,7 +58,8 @@ export type FourwingsDeckSublayer = {
   extentStart?: number;
   extentEnd?: number;
 };
-export type _FourwingsHeatmapTileLayerProps<DataT = FourwingsFeature> = {
+
+type _FourwingsHeatmapTileLayerProps<DataT = FourwingsFeature> = {
   startTime: number;
   endTime: number;
   sublayers: FourwingsDeckSublayer[];
@@ -114,11 +107,3 @@ export type FourwingsHeatmapLayerProps = FourwingsHeatmapTileLayerProps & {
   tilesCache: FourwingsHeatmapTilesCache;
   scales: FourwinsTileLayerScale[];
 };
-
-export type _FourwingsHeatmapStaticLayerProps = Omit<
-  _FourwingsHeatmapTileLayerProps,
-  'data' | 'highlightedFeatures'
->;
-
-export type FourwingsHeatmapStaticLayerProps =
-  _FourwingsHeatmapStaticLayerProps & Partial<TileLayerProps>;

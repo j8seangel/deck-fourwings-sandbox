@@ -28,7 +28,7 @@ const AVAILABLE_END = new Date().toISOString();
 function App() {
   const [{ start, end }, setRange] = useState<{ start: string; end: string }>({
     start: '2024-01-01T00:00:00.000Z',
-    end: '2024-04-01T00:00:00.000Z',
+    end: '2024-03-01T00:00:00.000Z',
   });
 
   const fourwingsLayerProps: FourwingsHeatmapTileLayerProps = {

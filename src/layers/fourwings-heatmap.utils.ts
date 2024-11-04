@@ -1,13 +1,10 @@
 import { Color } from '@deck.gl/core';
 import { stringify } from 'qs';
 import { ckmeans, mean, standardDeviation } from 'simple-statistics';
-import { Feature } from '@loaders.gl/schema';
-import { DateTime, DurationUnits } from 'luxon';
-import { TileCell } from '../loaders/lib/types';
+import { DateTime } from 'luxon';
 import {
   FourwingsAggregationOperation,
   AggregateCellParams,
-  CompareCellParams,
   FourwingsChunk,
   FourwingsDeckSublayer,
 } from './fourwings-heatmap.types';
@@ -44,7 +41,7 @@ export function getSteps(
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TileIndex = any;
 
-export function aggregateSublayerValues(
+function aggregateSublayerValues(
   values: number[],
   aggregationOperation = FourwingsAggregationOperation.Sum
 ) {
@@ -94,7 +91,7 @@ export const aggregateCell = ({
   });
 };
 
-export const sliceCellValues = ({
+const sliceCellValues = ({
   values,
   startFrame,
   endFrame,
@@ -111,36 +108,13 @@ export const sliceCellValues = ({
   );
 };
 
-export const compareCell = ({
-  cellValues,
-  aggregationOperation = FourwingsAggregationOperation.Sum,
-}: CompareCellParams): number[] => {
-  const [initialValue, comparedValue] = cellValues.map((sublayerValues) => {
-    if (!sublayerValues || !sublayerValues?.length) {
-      return 0;
-    }
-    const value = aggregateSublayerValues(sublayerValues, aggregationOperation);
-    return value ?? 0;
-  });
-  if (!initialValue && !comparedValue) {
-    return [];
-  }
-  if (!comparedValue) {
-    return [-initialValue];
-  }
-  if (!initialValue) {
-    return [comparedValue];
-  }
-  return [comparedValue - initialValue];
-};
-
 function stringHash(s: string): number {
   return Math.abs(
     s.split('').reduce((a, b) => ((a << 5) - a + b.charCodeAt(0)) | 0, 0)
   );
 }
 // Copied from deck.gl as the import doesn't work
-export function getURLFromTemplate(
+function getURLFromTemplate(
   template: string | string[],
   tile: {
     index: TileIndex;
@@ -240,73 +214,9 @@ export const getUTCDateTime = (d: string | number) =>
     ? DateTime.fromISO(d, { zone: 'utc' })
     : DateTime.fromMillis(d, { zone: 'utc' });
 
-export const getTimeRangeDuration = (
-  timeRange: { start: string; end: string },
-  unit: DurationUnits = 'years'
-) => {
-  if (timeRange && timeRange.start && timeRange.start) {
-    const startDateTime = getUTCDateTime(timeRange.start);
-    const endDateTime = getUTCDateTime(timeRange.end);
-    return endDateTime.diff(startDateTime, unit);
-  }
-  throw new Error('Invalid time range');
-};
-
-export function getISODateFromTS(ts: number) {
+function getISODateFromTS(ts: number) {
   return getUTCDateTime(ts).toISODate();
 }
-
-export const filterCellsByBounds = (cells: TileCell[], bounds: Bounds) => {
-  if (!bounds || cells?.length === 0) {
-    return [];
-  }
-  const { north, east, south, west } = bounds;
-  const rightWorldCopy = east >= 180;
-  const leftWorldCopy = west <= -180;
-  return cells.filter((c) => {
-    if (!c) return false;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [lon, lat] = (c.coordinates as any)[0][0];
-    if (lat < south || lat > north) {
-      return false;
-    }
-    // This tries to translate features longitude for a proper comparison against the viewport
-    // when they fall in a left or right copy of the world but not in the center one
-    // but... https://c.tenor.com/YwSmqv2CZr8AAAAd/dog-mechanic.gif
-    const featureInLeftCopy = lon > 0 && lon - 360 >= west;
-    const featureInRightCopy = lon < 0 && lon + 360 <= east;
-    const leftOffset =
-      leftWorldCopy && !rightWorldCopy && featureInLeftCopy ? -360 : 0;
-    const rightOffset =
-      rightWorldCopy && !leftWorldCopy && featureInRightCopy ? 360 : 0;
-    return (
-      lon + leftOffset + rightOffset > west &&
-      lon + leftOffset + rightOffset < east
-    );
-  });
-};
-
-const getMillisFromHtime = (htime: number) => {
-  return htime * 1000 * 60 * 60;
-};
-
-export const aggregatePositionsTimeseries = (positions: Feature[]) => {
-  if (!positions) {
-    return [];
-  }
-  const timeseries = positions.reduce((acc, position) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { htime, value } = position.properties as any;
-    const activityStart = getMillisFromHtime(htime);
-    if (acc[activityStart]) {
-      acc[activityStart] += value;
-    } else {
-      acc[activityStart] = value;
-    }
-    return acc;
-  }, {} as Record<number, number>);
-  return timeseries;
-};
 
 export const EMPTY_CELL_COLOR: Color = [0, 0, 0, 0];
 

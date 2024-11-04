@@ -11,6 +11,7 @@ import {
   EMPTY_CELL_COLOR,
   aggregateCell,
 } from './fourwings-heatmap.utils';
+import { HEATMAP_ID } from './fourwings.config';
 
 export class FourwingsHeatmapLayer extends CompositeLayer<FourwingsHeatmapLayerProps> {
   static layerName = 'FourwingsHeatmapLayer';
@@ -36,7 +37,7 @@ export class FourwingsHeatmapLayer extends CompositeLayer<FourwingsHeatmapLayerP
       startTime,
       endTime,
       interval,
-      visualizationMode: 'heatmap',
+      visualizationMode: HEATMAP_ID,
     };
     if (info.object) {
       object.sublayers = object.sublayers?.map((sublayer, i) => ({
