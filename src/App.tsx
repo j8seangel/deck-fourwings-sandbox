@@ -25,9 +25,14 @@ const INITIAL_VIEW_STATE: MapViewState = {
 const AVAILABLE_START = '2020-01-01T00:00:00.000Z';
 const AVAILABLE_END = new Date().toISOString();
 
+// deck.log.enable()
+// deck.log.level = 2
+// luma.log.enable()
+// luma.log.level = 2
+
 function App() {
   const [{ start, end }, setRange] = useState<{ start: string; end: string }>({
-    start: '2024-01-01T00:00:00.000Z',
+    start: '2024-04-01T00:00:00.000Z',
     end: '2024-04-01T00:00:00.000Z',
   });
 
