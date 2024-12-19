@@ -109,6 +109,7 @@ const getCellTimeseries = (
               col,
               row,
               values: new Array(sublayersLength),
+              directions: new Array(sublayersLength),
               dates: new Array(sublayersLength),
               cellId: generateUniqueId(tile!.index.x, tile!.index.y, cellNum),
               cellNum,
@@ -126,6 +127,8 @@ const getCellTimeseries = (
               features[cellNum].properties.values[subLayerIndex] = new Array(
                 numCellValues
               );
+              features[cellNum].properties.directions[subLayerIndex] =
+                new Array(numCellValues).fill(Math.floor(Math.random() * 361));
               features[cellNum].properties.dates[subLayerIndex] = new Array(
                 numCellValues
               );

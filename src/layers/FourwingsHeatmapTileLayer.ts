@@ -397,7 +397,7 @@ export class FourwingsHeatmapTileLayer extends CompositeLayer<FourwingsHeatmapTi
         minZoom: 0,
         onTileError: this._onLayerError,
         maxZoom: FOURWINGS_MAX_ZOOM,
-        zoomOffset: 1,
+        zoomOffset: -1, //1,
         opacity: 1,
         maxRequests: this.props.maxRequests,
         debounceTime: this.props.debounceTime,

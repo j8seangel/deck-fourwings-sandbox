@@ -1,5 +1,5 @@
 import { CompositeLayer, LayersList, PickingInfo, Color } from '@deck.gl/core';
-import { SolidPolygonLayer } from '@deck.gl/layers';
+// import { SolidPolygonLayer } from '@deck.gl/layers';
 import { getTimeRangeKey } from '../loaders/helpers/time';
 import { FourwingsFeature } from '../loaders/lib/types';
 import {
@@ -12,6 +12,7 @@ import {
   aggregateCell,
 } from './fourwings-heatmap.utils';
 import { HEATMAP_ID } from './fourwings.config';
+import TriangleLayer from './triangle-layer/triangle-layer';
 
 export class FourwingsHeatmapLayer extends CompositeLayer<FourwingsHeatmapLayerProps> {
   static layerName = 'FourwingsHeatmapLayer';
@@ -122,20 +123,49 @@ export class FourwingsHeatmapLayer extends CompositeLayer<FourwingsHeatmapLayerP
     this.endFrame = endFrame;
 
     return [
-      new SolidPolygonLayer(
+      new TriangleLayer(
         this.props,
         this.getSubLayerProps({
           id: `fourwings-tile`,
-          pickable: true,
-          getPickingInfo: this.getPickingInfo,
-          getFillColor: this.getCompareFillColor,
-          getPolygon: (d: FourwingsFeature) => d.geometry.coordinates[0],
-          updateTriggers: {
-            // This tells deck.gl to recalculate fillColor on changes
-            getFillColor: [startTime, endTime, colorDomain, colorRanges],
+          data,
+          getFillColor: [255, 255, 255, 255],
+          getLineColor: [0, 0, 0, 255],
+          getRadius: 1,
+          radiusMinPixels: 8,
+          stroked: false,
+          filled: true,
+          billboard: false,
+          antialiasing: true,
+          getVelocity: (d) => {
+            return Math.floor(Math.random() * 100);
           },
+          getDirection: (d) => {
+            return Math.floor(Math.random() * 361);
+          },
+          getPosition: (d: FourwingsFeature) => {
+            return d.geometry.coordinates[0][0];
+          },
+          // getLineWidth: 1,
+          // updateTriggers: {
+          //   // This tells deck.gl to recalculate fillColor on changes
+          //   getFillColor: [startTime, endTime, colorDomain, colorRanges],
+          // },
         })
       ),
+      // new SolidPolygonLayer(
+      //   this.props,
+      //   this.getSubLayerProps({
+      //     id: `fourwings-tile`,
+      //     pickable: true,
+      //     getPickingInfo: this.getPickingInfo,
+      //     getFillColor: this.getCompareFillColor,
+      //     getPolygon: (d: FourwingsFeature) => d.geometry.coordinates[0],
+      //     updateTriggers: {
+      //       // This tells deck.gl to recalculate fillColor on changes
+      //       getFillColor: [startTime, endTime, colorDomain, colorRanges],
+      //     },
+      //   })
+      // ),
     ] as LayersList;
   }
 
